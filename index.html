@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>To Do List</title>
+<style>
+    *{
+        color: black;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+    }
+    body{
+        background:linear-gradient(to top , rgb(0, 0, 78), rgb(0, 0, 14));
+        background-repeat: no-repeat;
+        background-position: center;
+        background-attachment: fixed;
+        text-align: center;
+    }
+    h1{
+        color: white;
+        font-size: 7vw;
+        text-shadow: 0px 0px 20px blue;
+    }
+    .container{
+        border-radius: 20px;
+        margin:10vh;
+    }
+    .completed{
+        text-decoration: line-through;
+        font-style: italic;
+        color: grey;
+    }
+    .flex{
+        justify-content: center;
+    }
+    #task-input{
+        background: white;
+        border-radius: 10px 0px 0px 10px;
+        width: 40%;
+        font-size: 2vw;
+        height: 100%;
+        border: 5px solid white;
+    }
+    #add-task{
+        background: white;
+        color: black;
+        border: none;
+        border-radius: 0px 10px 10px 0px;
+        width: 8%;
+        font-size: 2vw;
+        border: 5px solid green;
+    }
+    #add-task:hover{
+        background-color: green;
+        transition: 0.5s ease-out;
+        border: 5px solid green;
+    }
+    .space{
+        background: white;
+        width: 60vw;
+        border: 1px double green;
+        display: block;
+        margin: 5vh auto 0px auto;
+        border-radius: 20px;
+        padding: 1vw;
+    }
+    ul{
+        list-style: none;
+    }
+    .delete-button{
+        background: red;
+        color: white;
+        padding: 2px;
+        border: none;
+        border-radius: 5px ;
+        margin-left: 20%;
+    }
+    li{   
+        color:black;
+        border-bottom: 3px solid rgb(0, 0, 49);
+        background-color: white;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 5px;
+    }
+    span{
+        background:white;
+        font-size: 2vw;
+    }
+    #ask{
+        color: black;
+        position: absolute;
+        background: white;
+        border: 1px solid rgb(0, 0, 49);
+        border-radius: 20px;
+        visibility: hidden;
+    }
+    #ask p{
+        margin: 20px;
+    }
+    #ask button{
+        border: 3px solid red;
+        margin: 10px;
+        padding: 5px;
+        background: white;
+        border-radius: 10px;
+    }
+    #ask button:hover{
+        border: 3px solid red;
+        background: red;
+        color: white;
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>TO DO LIST</h1>
+        <div id="task-continer">
+            <div class="flex">
+                <input type="text" id="task-input" placeholder="Add a new task..">
+                <button id="add-task">  +  </button>
+            </div>
+            <div id="ask"></div>
+        </div>
+        <div class="space">
+            <ul id="task-list"></ul>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const taskInput = document.getElementById("task-input")
+            const addTaskButton = document.getElementById("add-task")
+            let taskList = document.getElementById("task-list")
+
+            addTaskButton.addEventListener("click", addTask)
+            taskInput.addEventListener("keyup", function (events) {
+                if (events.key == "Enter") {
+                    addTask()
+                }
+            })
+
+
+            function addTask() {
+                const taskText = taskInput.value.trim()
+                if (taskList === "") {
+                    
+                }
+
+                
+                let li = document.createElement("li")
+                li.innerHTML = `
+                    <input type="checkbox">
+                    <span>${taskText}</span>
+                    <button class="delete-button">Delete</button>
+                `
+
+                const checkbox = li.querySelector("input[type=checkbox]")
+                const deleteButton = li.querySelector(".delete-button")
+
+                
+                checkbox.addEventListener("change", toggleTaskCompetion)
+                checkbox.addEventListener("change", work)
+                deleteButton.addEventListener("click", work)
+                deleteButton.addEventListener("click", deleteTask)
+                taskList.appendChild(li)
+                taskInput.value = ""
+            }
+
+
+            let x = 0
+            function work(){
+                x++
+                if (x == 3 || x == 8 || x == 16 ) {
+                    document.getElementById("ask").style.visibility = "visible";
+                    p = document.getElementById('ask')
+                    p.innerHTML = `<p>
+                    Do you wish to <br/>Delete list
+                    <br/><button id="yes">YES</button><button id="no">NO</button></p>
+                    `
+
+                    const closeall = p.querySelector("#yes")
+                    const notcloseall = p.querySelector("#no")
+
+                    closeall.addEventListener("click", closeAll)
+                    notcloseall.addEventListener("click", notCloseAll)
+
+                    function notCloseAll() {
+                        x = 0
+                        document.getElementById("ask").style.visibility = "hidden";
+                    }
+                }
+            }
+
+            function toggleTaskCompetion() {
+                const taskItem = this.parentElement
+                taskItem.querySelector("span").classList.toggle("completed")
+            }
+            function deleteTask() {
+                taskItem = this.parentElement
+                taskList.removeChild(taskItem)
+            }
+            function closeAll() {
+                document.getElementById("ask").style.visibility = "hidden";
+                taskItem = this.parentElement
+                taskList.remove(taskItem)
+                location.reload(true)
+            }
+        })
+    </script>
+</body>
+</html>
